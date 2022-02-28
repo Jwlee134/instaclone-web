@@ -2,7 +2,7 @@ import { DefaultTheme } from "styled-components";
 
 export const lightTheme: DefaultTheme = {
   fontColor: "#2c2c2c",
-  bgColor: "#ffffff",
+  bgColor: "#fafafa",
 };
 export const darkTheme: DefaultTheme = {
   fontColor: "#ffffff",
