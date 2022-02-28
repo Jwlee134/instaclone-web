@@ -5,6 +5,7 @@ import { isDarkModeVar, isLoggedInVar } from "./apollo";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
+import GlobalStyles from "./styles/GlobalStyles";
 import { darkTheme, lightTheme } from "./styles/theme";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyles />
       <Router>
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
