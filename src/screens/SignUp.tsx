@@ -1,5 +1,11 @@
+import AuthLayout from "../components/auth/Container";
+
 function SignUp() {
-  return null;
+  return (
+    <AuthLayout>
+      <div></div>
+    </AuthLayout>
+  );
 }
 
 export default SignUp;
