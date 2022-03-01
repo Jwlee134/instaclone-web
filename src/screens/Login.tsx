@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const WhiteBox = styled.div`
   background-color: white;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid ${({ theme }) => theme.borderColor};
 `;
 
 const TopBox = styled(WhiteBox)`
@@ -33,27 +33,6 @@ const TopBox = styled(WhiteBox)`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    input {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 7px;
-      background-color: #fafafa;
-      border: 0.5px solid rgb(219, 219, 219);
-      border-radius: 3px;
-      margin-top: 5px;
-      &::placeholder {
-        font-size: 12px;
-      }
-      &:last-child {
-        border: none;
-        margin-top: 12px;
-        background-color: #0095f6;
-        color: white;
-        text-align: center;
-        padding: 8px 0px;
-        font-weight: 600;
-      }
-    }
   }
 `;
 
@@ -62,7 +41,7 @@ const BottomBox = styled(WhiteBox)`
   text-align: center;
   a {
     font-weight: 600;
-    color: #0095f6;
+    color: ${({ theme }) => theme.palette.blue};
   }
 `;
 
@@ -81,11 +60,12 @@ const Separator = styled.div`
   div {
     width: 100%;
     height: 1px;
-    background-color: rgb(219, 219, 219);
+    background-color: ${({ theme }) => theme.borderColor};
   }
   span {
     margin: 0 10px;
     color: #8e8e8e;
+    font-size: 12px;
     font-weight: 600;
   }
 `;
@@ -98,6 +78,30 @@ const FacebookLogin = styled.button`
   }
 `;
 
+const Input = styled.input`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px;
+  background-color: #fafafa;
+  border: 0.5px solid ${({ theme }) => theme.borderColor};
+  border-radius: 3px;
+  margin-top: 5px;
+  &::placeholder {
+    font-size: 12px;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  margin-top: 12px;
+  background-color: ${({ theme }) => theme.palette.blue};
+  color: white;
+  text-align: center;
+  padding: 8px 0px;
+  font-weight: 600;
+  border-radius: 3px;
+`;
+
 function Login() {
   return (
     <Container>
@@ -107,9 +111,9 @@ function Login() {
             <FontAwesomeIcon icon={faInstagram} size="3x" />
           </div>
           <form>
-            <input type="text" placeholder="Username" />
-            <input type="text" placeholder="Password" />
-            <input type="submit" value="Log in" />
+            <Input type="text" placeholder="Username" />
+            <Input type="text" placeholder="Password" />
+            <Button type="submit">Log in</Button>
           </form>
           <Separator>
             <div />
