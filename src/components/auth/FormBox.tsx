@@ -4,7 +4,7 @@ import { BaseBox } from "../shared";
 
 const TopBox = styled(BaseBox)`
   display: flex;
-  justify-content: center;
+  justify-items: center;
   align-items: center;
   flex-direction: column;
   padding: 35px 40px 25px 40px;
