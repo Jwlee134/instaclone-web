@@ -31,13 +31,13 @@ function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<Form>();
+    formState: { errors, isValid },
+  } = useForm<Form>({ mode: "onBlur" });
 
   const onValid: SubmitHandler<Form> = (data) => {
     console.log(data);
   };
-  console.log(errors);
+
   return (
     <AuthLayout>
       <PageTitle title="Login • Instagram" />
@@ -49,9 +49,14 @@ function Login() {
           <Input
             {...register("username", {
               required: "Username is required.",
+              minLength: {
+                value: 5,
+                message: "Username should be longer than 5 characters.",
+              },
             })}
             type="text"
             placeholder="Username"
+            error={errors?.username?.message}
           />
           <Input
             {...register("password", {
@@ -59,8 +64,11 @@ function Login() {
             })}
             type="password"
             placeholder="Password"
+            error={errors?.password?.message}
           />
-          <Button type="submit">Log In</Button>
+          <Button type="submit" disabled={!isValid}>
+            Log In
+          </Button>
         </form>
         <Separator />
         <FacebookLogin>

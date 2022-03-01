@@ -1,11 +1,13 @@
+import { ForwardedRef, forwardRef } from "react";
 import styled from "styled-components";
 
-const Input = styled.input`
+const SInput = styled.input<{ hasError: boolean }>`
   box-sizing: border-box;
   width: 100%;
   padding: 7px;
   background-color: #fafafa;
-  border: 0.5px solid ${({ theme }) => theme.borderColor};
+  border: 0.5px solid
+    ${({ theme, hasError }) => (!hasError ? theme.borderColor : "tomato")};
   border-radius: 3px;
   margin-top: 5px;
   &::placeholder {
@@ -13,10 +15,26 @@ const Input = styled.input`
   }
 `;
 
-/* interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
+const Message = styled.span`
+  font-size: 12px;
+  color: red;
+  font-weight: 500;
+  margin: 5px 0 10px 0;
+`;
 
-function Input({ ...props }: Props) {
-  return <SInput {...props} />;
-} */
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
+}
+
+const Input = forwardRef(
+  ({ error, ...props }: Props, ref: ForwardedRef<HTMLInputElement>) => {
+    return (
+      <>
+        <SInput ref={ref} hasError={Boolean(error)} {...props} />
+        {error && <Message>{error}</Message>}
+      </>
+    );
+  }
+);
 
 export default Input;

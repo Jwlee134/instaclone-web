@@ -10,6 +10,9 @@ const SBtn = styled.button`
   padding: 8px 0px;
   font-weight: 600;
   border-radius: 3px;
+  &:disabled {
+    opacity: 0.3;
+  }
 `;
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
