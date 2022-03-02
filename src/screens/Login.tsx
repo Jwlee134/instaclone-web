@@ -5,6 +5,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { logUserIn } from "../apollo";
 import BottomBox from "../components/auth/BottomBox";
@@ -26,11 +27,10 @@ const FacebookLogin = styled.button`
   }
 `;
 
-interface Form {
-  username: string;
-  password: string;
-  resultError?: string;
-}
+const Notification = styled.span`
+  color: #2ecc71;
+  margin-top: 15px;
+`;
 
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
@@ -42,14 +42,34 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
+interface Form {
+  username: string;
+  password: string;
+  resultError?: string;
+}
+
+interface State {
+  message: string;
+  username?: string;
+  password?: string;
+}
+
 function Login() {
+  const location = useLocation();
+  const state = location.state as State;
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     setError,
     clearErrors,
-  } = useForm<Form>({ mode: "onChange" });
+  } = useForm<Form>({
+    mode: "onChange",
+    defaultValues: {
+      username: state?.username || "",
+      password: state?.password || "",
+    },
+  });
   const [login, { loading }] = useLoginMutation({
     onCompleted: ({ login }) => {
       if (!login) return;
@@ -73,6 +93,7 @@ function Login() {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
+        {state?.message && <Notification>{state.message}</Notification>}
         <form onSubmit={handleSubmit(onValid)}>
           <Input
             {...register("username", {

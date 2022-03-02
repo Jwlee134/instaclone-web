@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { isLoggedInVar } from "../apollo";
+import { logUserOut } from "../apollo";
 
 const Container = styled.div``;
 
@@ -8,9 +9,11 @@ const Title = styled.h1`
 `;
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <Container>
-      <Title onClick={() => isLoggedInVar(false)}>Home</Title>
+      <Title onClick={() => logUserOut(navigate)}>Home</Title>
     </Container>
   );
 }

@@ -58,12 +58,14 @@ interface Form {
 }
 
 function SignUp() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     setError,
     clearErrors,
+    getValues,
   } = useForm<Form>({ mode: "onChange" });
   const [createAccount, { loading }] = useCreateAccountMutation({
     onCompleted: ({ createAccount }) => {
@@ -72,10 +74,17 @@ function SignUp() {
         setError("resultError", { message: createAccount.error });
         return;
       }
-      navigate(routes.home, { replace: true });
+      const { username, password } = getValues();
+      navigate(routes.home, {
+        replace: true,
+        state: {
+          message: "Account has created. Please log in.",
+          username,
+          password,
+        },
+      });
     },
   });
-  const navigate = useNavigate();
 
   const onValid: SubmitHandler<Form> = (data) => {
     createAccount({ variables: data });
