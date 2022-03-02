@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import {
   faFacebookSquare,
   faInstagram,
@@ -31,6 +32,16 @@ interface Form {
   resultError?: string;
 }
 
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      isSuccess
+      token
+      error
+    }
+  }
+`;
+
 function Login() {
   const {
     register,
@@ -51,9 +62,8 @@ function Login() {
     },
   });
 
-  const onValid: SubmitHandler<Form> = ({ username, password }) => {
-    if (loading) return;
-    login({ variables: { username, password } });
+  const onValid: SubmitHandler<Form> = (data) => {
+    login({ variables: data });
   };
 
   return (
