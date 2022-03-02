@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
-import AuthLayout from "../components/auth/Container";
+import AuthLayout from "../components/auth/AuthLayout";
 import FormBox from "../components/auth/FormBox";
 import FormError from "../components/auth/FormError";
 import Input from "../components/auth/Input";
