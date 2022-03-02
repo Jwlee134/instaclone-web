@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import {
   faFacebookSquare,
   faInstagram,
@@ -6,6 +5,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
+import { logUserIn } from "../apollo";
 import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
 import AuthLayout from "../components/auth/Container";
@@ -25,16 +25,6 @@ const FacebookLogin = styled.button`
   }
 `;
 
-const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      isSuccess
-      token
-      error
-    }
-  }
-`;
-
 interface Form {
   username: string;
   password: string;
@@ -47,13 +37,17 @@ function Login() {
     handleSubmit,
     formState: { errors, isValid },
     setError,
+    clearErrors,
   } = useForm<Form>({ mode: "onChange" });
   const [login, { loading }] = useLoginMutation({
     onCompleted: ({ login }) => {
-      if (login?.error) {
-        setError("resultError", { message: login.error });
-      } else {
+      if (!login) return;
+      const { error, token } = login;
+      if (error) {
+        setError("resultError", { message: error });
+        return;
       }
+      if (token) logUserIn(token);
     },
   });
 
@@ -81,6 +75,7 @@ function Login() {
             type="text"
             placeholder="Username"
             error={errors?.username?.message}
+            onFocus={() => clearErrors("resultError")}
           />
           <Input
             {...register("password", {
@@ -89,6 +84,7 @@ function Login() {
             type="password"
             placeholder="Password"
             error={errors?.password?.message}
+            onFocus={() => clearErrors("resultError")}
           />
           <Button type="submit" disabled={loading || !isValid}>
             {loading ? "Loading" : "Log In"}
