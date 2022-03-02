@@ -1,5 +1,6 @@
 import { ForwardedRef, forwardRef } from "react";
 import styled from "styled-components";
+import FormError from "./FormError";
 
 const SInput = styled.input<{ hasError: boolean }>`
   box-sizing: border-box;
@@ -15,13 +16,6 @@ const SInput = styled.input<{ hasError: boolean }>`
   }
 `;
 
-const Message = styled.span`
-  font-size: 12px;
-  color: red;
-  font-weight: 500;
-  margin: 5px 0 10px 0;
-`;
-
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
@@ -31,7 +25,7 @@ const Input = forwardRef(
     return (
       <>
         <SInput ref={ref} hasError={Boolean(error)} {...props} />
-        {error && <Message>{error}</Message>}
+        <FormError error={error} />
       </>
     );
   }

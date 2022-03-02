@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import {
   faFacebookSquare,
   faInstagram,
@@ -9,9 +10,11 @@ import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
 import AuthLayout from "../components/auth/Container";
 import FormBox from "../components/auth/FormBox";
+import FormError from "../components/auth/FormError";
 import Input from "../components/auth/Input";
 import Separator from "../components/auth/Separator";
 import PageTitle from "../components/PageTitle";
+import { useLoginMutation } from "../graphql/generated";
 import routes from "../routes";
 
 const FacebookLogin = styled.button`
@@ -22,9 +25,20 @@ const FacebookLogin = styled.button`
   }
 `;
 
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      isSuccess
+      token
+      error
+    }
+  }
+`;
+
 interface Form {
   username: string;
   password: string;
+  resultError?: string;
 }
 
 function Login() {
@@ -32,10 +46,20 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<Form>({ mode: "onBlur" });
+    setError,
+  } = useForm<Form>({ mode: "onChange" });
+  const [login, { loading }] = useLoginMutation({
+    onCompleted: ({ login }) => {
+      if (login?.error) {
+        setError("resultError", { message: login.error });
+      } else {
+      }
+    },
+  });
 
-  const onValid: SubmitHandler<Form> = (data) => {
-    console.log(data);
+  const onValid: SubmitHandler<Form> = ({ username, password }) => {
+    if (loading) return;
+    login({ variables: { username, password } });
   };
 
   return (
@@ -66,9 +90,10 @@ function Login() {
             placeholder="Password"
             error={errors?.password?.message}
           />
-          <Button type="submit" disabled={!isValid}>
-            Log In
+          <Button type="submit" disabled={loading || !isValid}>
+            {loading ? "Loading" : "Log In"}
           </Button>
+          <FormError error={errors?.resultError?.message} />
         </form>
         <Separator />
         <FacebookLogin>
