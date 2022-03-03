@@ -24,3 +24,10 @@ mutation createAccount(
     error
   }
 }
+
+mutation toggleLike($toggleLikeId: Int!) {
+  toggleLike(id: $toggleLikeId) {
+    isSuccess
+    error
+  }
+}
