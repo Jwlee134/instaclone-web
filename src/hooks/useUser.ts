@@ -1,5 +1,7 @@
 import { gql, useReactiveVar } from "@apollo/client";
-import { isLoggedInVar } from "../apollo";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { isLoggedInVar, logUserOut } from "../apollo";
 import { useMeQuery } from "../graphql/generated";
 
 const ME_QUERY = gql`
@@ -12,9 +14,17 @@ const ME_QUERY = gql`
 `;
 
 function useUser() {
+  const navigate = useNavigate();
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data } = useMeQuery({ skip: !isLoggedIn });
-  console.log(data?.me);
+
+  useEffect(() => {
+    if (data?.me === null) {
+      logUserOut(navigate);
+    }
+  }, [data, navigate]);
+
+  return data?.me;
 }
 
 export default useUser;
