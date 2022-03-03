@@ -4,6 +4,7 @@ import {
   faHeart,
   faPaperPlane,
 } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
@@ -15,7 +16,8 @@ const Container = styled.div``;
 const PhotoContainer = styled.div`
   background-color: white;
   border: 1px solid ${({ theme }) => theme.borderColor};
-  margin-bottom: 20px;
+  margin-bottom: 60px;
+  border-radius: 4px;
   max-width: 615px;
 `;
 
@@ -23,6 +25,7 @@ const PhotoHeader = styled.div`
   padding: 15px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid rgb(239, 239, 239);
 `;
 
 const PhotoFile = styled.div`
@@ -41,8 +44,11 @@ const PhotoActions = styled.div`
   justify-content: space-between;
 `;
 
-const PhotoAction = styled.span`
+const PhotoAction = styled.button`
   margin-right: 10px;
+  svg {
+    font-size: 20px;
+  }
 `;
 
 const Likes = styled(FatText)`
@@ -72,18 +78,21 @@ function Home() {
             <PhotoActions>
               <div>
                 <PhotoAction>
-                  <FontAwesomeIcon icon={faHeart} size="2x" />
+                  <FontAwesomeIcon
+                    style={{ color: photo?.isLiked ? "tomato" : "inherit" }}
+                    icon={photo?.isLiked ? faHeartSolid : faHeart}
+                  />
                 </PhotoAction>
                 <PhotoAction>
-                  <FontAwesomeIcon icon={faComment} size="2x" />
+                  <FontAwesomeIcon icon={faComment} />
                 </PhotoAction>
                 <PhotoAction>
-                  <FontAwesomeIcon icon={faPaperPlane} size="2x" />
+                  <FontAwesomeIcon icon={faPaperPlane} />
                 </PhotoAction>
               </div>
-              <div>
-                <FontAwesomeIcon icon={faBookmark} size="2x" />
-              </div>
+              <PhotoAction>
+                <FontAwesomeIcon icon={faBookmark} />
+              </PhotoAction>
             </PhotoActions>
             <Likes>
               {photo?.likes === 1 ? "1 like" : `${photo?.likes} likes`}
