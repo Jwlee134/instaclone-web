@@ -12,10 +12,10 @@ const SAvatar = styled.div`
   cursor: pointer;
 `;
 
-function Avatar({ url = "" }) {
+function Avatar({ url }: { url: string | null | undefined }) {
   return (
     <SAvatar>
-      {Boolean(url) ? <img src={url} alt="프로필 사진" /> : null}
+      {Boolean(url) ? <img src={url || ""} alt="프로필 사진" /> : null}
     </SAvatar>
   );
 }
