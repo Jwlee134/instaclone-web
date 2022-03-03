@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import {
   faFacebookSquare,
   faInstagram,
@@ -30,16 +29,6 @@ const FacebookLogin = styled.button`
 const Notification = styled.span`
   color: #2ecc71;
   margin-top: 15px;
-`;
-
-const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      isSuccess
-      token
-      error
-    }
-  }
 `;
 
 interface Form {
