@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Avatar from "./Avatar";
 import { FatText } from "./shared";
 import { SeeFeedQuery, useToggleLikeMutation } from "../graphql/generated";
+import { gql } from "@apollo/client";
 
 const PhotoContainer = styled.div`
   background-color: white;
@@ -65,7 +66,22 @@ interface Props {
 }
 
 function Feed({ photo }: Props) {
-  const [toggleLike] = useToggleLikeMutation();
+  const [toggleLike] = useToggleLikeMutation({
+    variables: { toggleLikeId: photo?.id! },
+    update: (cache, { data }) => {
+      if (data?.toggleLike?.isSuccess) {
+        cache.writeFragment({
+          id: `Photo:${photo?.id!}`,
+          fragment: gql`
+            fragment Photo on Photo {
+              isLiked
+            }
+          `,
+          data: { isLiked: !photo?.isLiked },
+        });
+      }
+    },
+  });
 
   return (
     <PhotoContainer>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Feed from "../components/Feed";
+import PageTitle from "../components/PageTitle";
 import { useSeeFeedQuery } from "../graphql/generated";
 
 const Container = styled.div``;
@@ -9,6 +10,7 @@ function Home() {
 
   return (
     <Container>
+      <PageTitle title="Home • Instagram" />
       {seeFeed?.map((photo) => (
         <Feed key={photo?.id} photo={photo} />
       ))}
