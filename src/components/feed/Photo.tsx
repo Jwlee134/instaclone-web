@@ -7,10 +7,11 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Avatar from "./Avatar";
-import { FatText } from "./shared";
-import { SeeFeedQuery, useToggleLikeMutation } from "../graphql/generated";
+import Avatar from "../Avatar";
+import { FatText } from "../shared";
+import { SeeFeedQuery, useToggleLikeMutation } from "../../graphql/generated";
 import { gql } from "@apollo/client";
+import Comments from "./Comments";
 
 const PhotoContainer = styled.div`
   background-color: white;
@@ -59,31 +60,13 @@ const Username = styled(FatText)`
   margin-left: 15px;
 `;
 
-const Comments = styled.div`
-  margin-top: 20px;
-`;
-
-const Comment = styled.div``;
-
-const CommentCaption = styled.span`
-  margin-left: 10px;
-`;
-
-const NumOfComment = styled.span`
-  opacity: 0.5;
-  font-size: 12px;
-  margin: 10px 0;
-  display: block;
-  font-weight: 600;
-`;
-
 type ArrayElement<ArrayType extends readonly unknown[] | null | undefined> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 interface Props {
   photo: ArrayElement<SeeFeedQuery["seeFeed"]>;
 }
 
-function Feed({ photo }: Props) {
+function Photo({ photo }: Props) {
   const [toggleLike] = useToggleLikeMutation({
     variables: { toggleLikeId: photo?.id! },
     update: (cache, { data }) => {
@@ -145,20 +128,10 @@ function Feed({ photo }: Props) {
           </PhotoAction>
         </PhotoActions>
         <Likes>{photo?.likes === 1 ? "1 like" : `${photo?.likes} likes`}</Likes>
-        <Comments>
-          <Comment>
-            <FatText>{photo?.owner?.username}</FatText>
-            <CommentCaption>{photo?.caption}</CommentCaption>
-          </Comment>
-          <NumOfComment>
-            {photo?.numOfComments === 1
-              ? "1 comment"
-              : `${photo?.numOfComments} comments`}
-          </NumOfComment>
-        </Comments>
+        <Comments photo={photo} />
       </PhotoData>
     </PhotoContainer>
   );
 }
 
-export default Feed;
+export default Photo;
