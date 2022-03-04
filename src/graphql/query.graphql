@@ -15,7 +15,17 @@ query seeFeed {
     file
     caption
     likes
-    comments
+    numOfComments
+    comments {
+      id
+      text
+      isMine
+      createdAt
+      user {
+        username
+        avatar
+      }
+    }
     createdAt
     isMine
     isLiked
