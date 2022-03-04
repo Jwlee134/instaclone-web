@@ -69,17 +69,27 @@ function Feed({ photo }: Props) {
   const [toggleLike] = useToggleLikeMutation({
     variables: { toggleLikeId: photo?.id! },
     update: (cache, { data }) => {
-      if (data?.toggleLike?.isSuccess) {
-        cache.writeFragment({
-          id: `Photo:${photo?.id!}`,
-          fragment: gql`
-            fragment Photo on Photo {
-              isLiked
-            }
-          `,
-          data: { isLiked: !photo?.isLiked },
-        });
-      }
+      if (!photo || !data?.toggleLike?.isSuccess) return;
+      const id = `Photo:${photo.id}`;
+      const fragment = gql`
+        fragment Photo on Photo {
+          isLiked
+          likes
+        }
+      `;
+      const result = cache.readFragment<{ isLiked: boolean; likes: number }>({
+        id,
+        fragment,
+      });
+      if (!result) return;
+      cache.writeFragment({
+        id,
+        fragment,
+        data: {
+          isLiked: !result.isLiked,
+          likes: result.isLiked ? result.likes - 1 : result.likes! + 1,
+        },
+      });
     },
   });
 
