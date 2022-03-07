@@ -39,3 +39,10 @@ mutation createComment($createCommentId: Int!, $text: String!) {
     id
   }
 }
+
+mutation deleteComment($deleteCommentId: Int!) {
+  deleteComment(id: $deleteCommentId) {
+    isSuccess
+    error
+  }
+}

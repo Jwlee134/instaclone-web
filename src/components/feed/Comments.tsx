@@ -64,7 +64,7 @@ function Comments({ photo }: Props) {
         user,
       };
       // Apollo devTool로 photo를 보면 comments 배열에 comment의 정보가 아닌 ref가 담겨있는 걸 확인할 수 있음
-      // 따라서 writeFragment로 캐시를 생성함과 동시에 ref를 리턴받아 modify로 photo comments 배열에 푸쉬
+      // 따라서 writeFragment로 comment의 캐시를 생성함과 동시에 ref를 리턴받아 modify로 photo comments 배열에 푸쉬
       const newCommentCache = cache.writeFragment({
         fragment: gql`
           fragment NewComment on Comment {
@@ -108,8 +108,11 @@ function Comments({ photo }: Props) {
       {photo?.comments?.map((comment) => (
         <Comment
           key={comment?.id}
+          photoId={photo.id}
+          commentId={comment?.id}
           username={comment?.user.username}
           text={comment?.text}
+          isMine={comment?.isMine}
         />
       ))}
       <PostCommentContainer>
