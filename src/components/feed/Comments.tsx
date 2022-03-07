@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -54,20 +55,35 @@ function Comments({ photo }: Props) {
       } = data;
       const { comment } = getValues();
       setValue("comment", "");
+      const newComment = {
+        __typename: "Comment",
+        id,
+        text: comment,
+        isMine: true,
+        createdAt: Date.now(),
+        user,
+      };
+      // Apollo devTool로 photo를 보면 comments 배열에 comment의 정보가 아닌 ref가 담겨있는 걸 확인할 수 있음
+      // 따라서 writeFragment로 캐시를 생성함과 동시에 ref를 리턴받아 modify로 photo comments 배열에 푸쉬
+      const newCommentCache = cache.writeFragment({
+        fragment: gql`
+          fragment NewComment on Comment {
+            id
+            createdAt
+            isMine
+            text
+            user {
+              username
+              avatar
+            }
+          }
+        `,
+        data: newComment,
+      });
       cache.modify({
         id: `Photo:${photo.id}`,
         fields: {
-          comments: (prev) => [
-            ...prev,
-            {
-              __typename: "Comment",
-              id,
-              text: comment,
-              isMine: true,
-              createdAt: Date.now(),
-              user,
-            },
-          ],
+          comments: (prev) => [...prev, newCommentCache],
           numOfComments: (prev) => prev + 1,
         },
       });
