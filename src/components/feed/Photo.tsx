@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Avatar from "../Avatar";
 import { FatText } from "../shared";
 import { SeeFeedQuery, useToggleLikeMutation } from "../../graphql/generated";
-import { gql } from "@apollo/client";
 import Comments from "./Comments";
 
 const PhotoContainer = styled.div`
@@ -70,7 +69,7 @@ function Photo({ photo }: Props) {
   const [toggleLike] = useToggleLikeMutation({
     variables: { toggleLikeId: photo?.id! },
     update: (cache, { data }) => {
-      if (!photo || !data?.toggleLike?.isSuccess) return;
+      if (!photo || !data?.toggleLike.isSuccess) return;
       const id = `Photo:${photo.id}`;
       cache.modify({
         id,

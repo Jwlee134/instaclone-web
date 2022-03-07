@@ -31,3 +31,11 @@ mutation toggleLike($toggleLikeId: Int!) {
     error
   }
 }
+
+mutation createComment($createCommentId: Int!, $text: String!) {
+  createComment(id: $createCommentId, text: $text) {
+    isSuccess
+    error
+    id
+  }
+}
