@@ -72,23 +72,11 @@ function Photo({ photo }: Props) {
     update: (cache, { data }) => {
       if (!photo || !data?.toggleLike?.isSuccess) return;
       const id = `Photo:${photo.id}`;
-      const fragment = gql`
-        fragment Photo on Photo {
-          isLiked
-          likes
-        }
-      `;
-      const result = cache.readFragment<{ isLiked: boolean; likes: number }>({
+      cache.modify({
         id,
-        fragment,
-      });
-      if (!result) return;
-      cache.writeFragment({
-        id,
-        fragment,
-        data: {
-          isLiked: !result.isLiked,
-          likes: result.isLiked ? result.likes - 1 : result.likes! + 1,
+        fields: {
+          isLiked: (prev) => !prev,
+          likes: (prev) => (!photo.isLiked ? prev + 1 : prev - 1),
         },
       });
     },
