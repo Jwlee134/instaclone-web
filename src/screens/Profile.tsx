@@ -114,6 +114,10 @@ function Profile() {
     update: (cache, { data }) => {
       if (!data?.followUser.isSuccess) return;
       cache.modify({
+        id: `User:${user?.username!}`,
+        fields: { totalFollowing: (prev) => prev + 1 },
+      });
+      cache.modify({
         id: `User:${username!}`,
         fields: {
           isFollowing: (prev) => !prev,
@@ -126,6 +130,10 @@ function Profile() {
     variables: { username: data?.seeProfile?.username! },
     onCompleted: (data) => {
       if (!data.unfollowUser.isSuccess) return;
+      client.cache.modify({
+        id: `User:${user?.username!}`,
+        fields: { totalFollowing: (prev) => prev - 1 },
+      });
       client.cache.modify({
         id: `User:${username!}`,
         fields: {
