@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
@@ -106,20 +107,33 @@ function Profile() {
   const { data, loading } = useSeeProfileQuery({
     variables: { username: username! },
   });
+  const client = useApolloClient();
   const user = useUser();
   const [follow, { loading: followLoading }] = useFollowUserMutation({
     variables: { username: username! },
-    refetchQueries: [
-      { query: SeeProfileDocument, variables: { username: username! } },
-      { query: SeeProfileDocument, variables: { username: user?.username! } },
-    ],
+    update: (cache, { data }) => {
+      if (!data?.followUser.isSuccess) return;
+      cache.modify({
+        id: `User:${username!}`,
+        fields: {
+          isFollowing: (prev) => !prev,
+          totalFollowers: (prev) => prev + 1,
+        },
+      });
+    },
   });
   const [unfollow, { loading: unfollowLoading }] = useUnfollowUserMutation({
     variables: { username: data?.seeProfile?.username! },
-    refetchQueries: [
-      { query: SeeProfileDocument, variables: { username: username! } },
-      { query: SeeProfileDocument, variables: { username: user?.username! } },
-    ],
+    onCompleted: (data) => {
+      if (!data.unfollowUser.isSuccess) return;
+      client.cache.modify({
+        id: `User:${username!}`,
+        fields: {
+          isFollowing: (prev) => !prev,
+          totalFollowers: (prev) => prev - 1,
+        },
+      });
+    },
   });
 
   const followUser = () => {

@@ -407,7 +407,7 @@ export type UnfollowUserMutation = { __typename?: 'Mutation', unfollowUser: { __
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar?: string | null, username: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar?: string | null, username: string, totalFollowers: number, totalFollowing: number } | null };
 
 export type SeeFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -698,6 +698,8 @@ export const MeDocument = gql`
   me {
     avatar
     username
+    totalFollowers
+    totalFollowing
   }
 }
     `;
