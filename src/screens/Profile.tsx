@@ -5,7 +5,13 @@ import styled from "styled-components";
 import Button from "../components/auth/Button";
 import PageTitle from "../components/PageTitle";
 import { FatText } from "../components/shared";
-import { useSeeProfileQuery } from "../graphql/generated";
+import {
+  SeeProfileDocument,
+  useFollowUserMutation,
+  useSeeProfileQuery,
+  useUnfollowUserMutation,
+} from "../graphql/generated";
+import useUser from "../hooks/useUser";
 
 const Header = styled.div`
   display: flex;
@@ -96,18 +102,39 @@ const ProfileBtn = styled(Button)`
 `;
 
 function Profile() {
-  const params = useParams();
+  const { username } = useParams();
   const { data, loading } = useSeeProfileQuery({
-    variables: { username: params.username! },
+    variables: { username: username! },
   });
+  const user = useUser();
+  const [follow, { loading: followLoading }] = useFollowUserMutation({
+    variables: { username: username! },
+    refetchQueries: [
+      { query: SeeProfileDocument, variables: { username: username! } },
+      { query: SeeProfileDocument, variables: { username: user?.username! } },
+    ],
+  });
+  const [unfollow, { loading: unfollowLoading }] = useUnfollowUserMutation({
+    variables: { username: data?.seeProfile?.username! },
+    refetchQueries: [
+      { query: SeeProfileDocument, variables: { username: username! } },
+      { query: SeeProfileDocument, variables: { username: user?.username! } },
+    ],
+  });
+
+  const followUser = () => {
+    if (followLoading) return;
+    follow();
+  };
+
+  const unFollowUser = () => {
+    if (unfollowLoading) return;
+    unfollow();
+  };
 
   return (
     <div>
-      <PageTitle
-        title={
-          loading ? "Loading..." : `${data?.seeProfile?.username!} • Instagram`
-        }
-      />
+      <PageTitle title={loading ? "Loading..." : `${username!} • Instagram`} />
       <Header>
         <Avatar src={data?.seeProfile?.avatar!} />
         <Column>
@@ -117,9 +144,9 @@ function Profile() {
             {!data?.seeProfile?.isMe && (
               <>
                 {data?.seeProfile?.isFollowing ? (
-                  <ProfileBtn>Unfollow</ProfileBtn>
+                  <ProfileBtn onClick={unFollowUser}>Unfollow</ProfileBtn>
                 ) : (
-                  <ProfileBtn>Follow</ProfileBtn>
+                  <ProfileBtn onClick={followUser}>Follow</ProfileBtn>
                 )}
               </>
             )}
