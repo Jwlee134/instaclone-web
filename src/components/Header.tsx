@@ -64,7 +64,9 @@ function Header() {
                 <FontAwesomeIcon icon={faCompass} size="lg" />
               </Icon>
               <Icon>
-                <Avatar url={loggedInUser.avatar || ""} />
+                <Link to={routes.profile(loggedInUser.username)}>
+                  <Avatar url={loggedInUser.avatar || ""} />
+                </Link>
               </Icon>
             </IconContainer>
           ) : (

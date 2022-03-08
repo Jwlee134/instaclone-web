@@ -11,6 +11,8 @@ import Avatar from "../Avatar";
 import { FatText } from "../shared";
 import { SeeFeedQuery, useToggleLikeMutation } from "../../graphql/generated";
 import Comments from "./Comments";
+import { Link } from "react-router-dom";
+import routes from "../../routes";
 
 const PhotoContainer = styled.div`
   background-color: white;
@@ -25,6 +27,10 @@ const PhotoHeader = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(239, 239, 239);
+  a {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const PhotoFile = styled.div`
@@ -84,8 +90,10 @@ function Photo({ photo }: Props) {
   return (
     <PhotoContainer>
       <PhotoHeader>
-        <Avatar size="lg" url={photo?.owner?.avatar} />
-        <Username>{photo?.owner?.username}</Username>
+        <Link to={routes.profile(photo?.owner?.username!)}>
+          <Avatar size="lg" url={photo?.owner?.avatar} />
+          <Username>{photo?.owner?.username}</Username>
+        </Link>
       </PhotoHeader>
       <PhotoFile>
         <img src={photo?.file} alt="피드 사진" />

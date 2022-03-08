@@ -3,6 +3,7 @@ import { FatText } from "../shared";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { useDeleteCommentMutation } from "../../graphql/generated";
+import routes from "../../routes";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -55,7 +56,9 @@ function Comment({ photoId, commentId, username, text, isMine }: Props) {
 
   return (
     <CommentContainer>
-      <FatText>{username}</FatText>
+      <Link to={routes.profile(username!)}>
+        <FatText>{username}</FatText>
+      </Link>
       <CommentCaptionContainer>
         <CommentCaption>
           {text
