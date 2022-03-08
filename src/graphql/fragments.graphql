@@ -1,6 +1,8 @@
 fragment PhotoFragment on Photo {
   id
   file
+  likes
+  numOfComments
 }
 
 fragment CommentFragment on Comment {

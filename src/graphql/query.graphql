@@ -13,8 +13,6 @@ query seeFeed {
       avatar
     }
     caption
-    likes
-    numOfComments
     comments {
       ...CommentFragment
     }
@@ -29,6 +27,8 @@ query seeProfile($username: String!) {
     avatar
     bio
     username
+    firstName
+    lastName
     totalFollowers
     totalFollowing
     isFollowing

@@ -345,7 +345,7 @@ export type UserPhotosArgs = {
   lastId?: InputMaybe<Scalars['Int']>;
 };
 
-export type PhotoFragmentFragment = { __typename?: 'Photo', id: number, file: string };
+export type PhotoFragmentFragment = { __typename?: 'Photo', id: number, file: string, likes: number, numOfComments: number };
 
 export type CommentFragmentFragment = { __typename?: 'Comment', id: number, text: string, isMine: boolean, createdAt: string, user: { __typename?: 'User', username: string, avatar?: string | null } };
 
@@ -398,19 +398,21 @@ export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', avatar
 export type SeeFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SeeFeedQuery = { __typename?: 'Query', seeFeed?: Array<{ __typename?: 'Photo', caption?: string | null, likes: number, numOfComments: number, createdAt: string, isMine: boolean, isLiked: boolean, id: number, file: string, owner?: { __typename?: 'User', username: string, avatar?: string | null } | null, comments?: Array<{ __typename?: 'Comment', id: number, text: string, isMine: boolean, createdAt: string, user: { __typename?: 'User', username: string, avatar?: string | null } } | null> | null } | null> | null };
+export type SeeFeedQuery = { __typename?: 'Query', seeFeed?: Array<{ __typename?: 'Photo', caption?: string | null, createdAt: string, isMine: boolean, isLiked: boolean, id: number, file: string, likes: number, numOfComments: number, owner?: { __typename?: 'User', username: string, avatar?: string | null } | null, comments?: Array<{ __typename?: 'Comment', id: number, text: string, isMine: boolean, createdAt: string, user: { __typename?: 'User', username: string, avatar?: string | null } } | null> | null } | null> | null };
 
 export type SeeProfileQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type SeeProfileQuery = { __typename?: 'Query', seeProfile?: { __typename?: 'User', avatar?: string | null, bio?: string | null, username: string, totalFollowers: number, totalFollowing: number, isFollowing: boolean, isMe: boolean, photos?: Array<{ __typename?: 'Photo', id: number, file: string } | null> | null } | null };
+export type SeeProfileQuery = { __typename?: 'Query', seeProfile?: { __typename?: 'User', avatar?: string | null, bio?: string | null, username: string, firstName: string, lastName?: string | null, totalFollowers: number, totalFollowing: number, isFollowing: boolean, isMe: boolean, photos?: Array<{ __typename?: 'Photo', id: number, file: string, likes: number, numOfComments: number } | null> | null } | null };
 
 export const PhotoFragmentFragmentDoc = gql`
     fragment PhotoFragment on Photo {
   id
   file
+  likes
+  numOfComments
 }
     `;
 export const CommentFragmentFragmentDoc = gql`
@@ -653,8 +655,6 @@ export const SeeFeedDocument = gql`
       avatar
     }
     caption
-    likes
-    numOfComments
     comments {
       ...CommentFragment
     }
@@ -698,6 +698,8 @@ export const SeeProfileDocument = gql`
     avatar
     bio
     username
+    firstName
+    lastName
     totalFollowers
     totalFollowing
     isFollowing
