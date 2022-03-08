@@ -405,7 +405,7 @@ export type SeeProfileQueryVariables = Exact<{
 }>;
 
 
-export type SeeProfileQuery = { __typename?: 'Query', seeProfile?: { __typename?: 'User', avatar?: string | null, bio?: string | null, username: string, totalFollowers: number, totalFollowing: number, isFollowing: boolean, isMe: boolean, id: number, photos?: Array<{ __typename?: 'Photo', id: number, file: string } | null> | null } | null };
+export type SeeProfileQuery = { __typename?: 'Query', seeProfile?: { __typename?: 'User', avatar?: string | null, bio?: string | null, username: string, totalFollowers: number, totalFollowing: number, isFollowing: boolean, isMe: boolean, photos?: Array<{ __typename?: 'Photo', id: number, file: string } | null> | null } | null };
 
 export const PhotoFragmentFragmentDoc = gql`
     fragment PhotoFragment on Photo {
@@ -702,7 +702,6 @@ export const SeeProfileDocument = gql`
     totalFollowing
     isFollowing
     isMe
-    id
     photos {
       ...PhotoFragment
     }

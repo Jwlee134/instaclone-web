@@ -33,7 +33,6 @@ query seeProfile($username: String!) {
     totalFollowing
     isFollowing
     isMe
-    id
     photos {
       ...PhotoFragment
     }

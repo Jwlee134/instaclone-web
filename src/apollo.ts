@@ -24,7 +24,10 @@ const authLink = setContext((_, { headers }) => ({
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    // 기본적으로 유니크 필드인 id를 통해 캐시를 생성하는데 (User:1) 만약 id를 쿼리하지 않을 경우 어쨌든 캐시를 생성하기 위해 다른 유니크 필드를 설정 (User:username)
+    typePolicies: { User: { keyFields: (obj) => `User:${obj.username}` } },
+  }),
 });
 
 export const logUserIn = (token: string) => {
