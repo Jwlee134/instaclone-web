@@ -1,8 +1,13 @@
 import { useParams } from "react-router-dom";
+import { useSeeProfileQuery } from "../graphql/generated";
 
 function Profile() {
   const params = useParams();
-  console.log(params.id);
+  const { data } = useSeeProfileQuery({
+    variables: { username: params.username! },
+  });
+  console.log(data);
+
   return null;
 }
 

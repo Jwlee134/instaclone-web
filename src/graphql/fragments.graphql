@@ -1,0 +1,15 @@
+fragment PhotoFragment on Photo {
+  id
+  file
+}
+
+fragment CommentFragment on Comment {
+  id
+  text
+  isMine
+  createdAt
+  user {
+    username
+    avatar
+  }
+}
