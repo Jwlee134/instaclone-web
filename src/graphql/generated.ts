@@ -390,6 +390,20 @@ export type DeleteCommentMutationVariables = Exact<{
 
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: { __typename?: 'MutationResponse', isSuccess: boolean, error?: string | null } };
 
+export type FollowUserMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type FollowUserMutation = { __typename?: 'Mutation', followUser: { __typename?: 'MutationResponse', isSuccess: boolean, error?: string | null } };
+
+export type UnfollowUserMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UnfollowUserMutation = { __typename?: 'Mutation', unfollowUser: { __typename?: 'MutationResponse', isSuccess: boolean, error?: string | null } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -611,6 +625,74 @@ export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
 export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export const FollowUserDocument = gql`
+    mutation followUser($username: String!) {
+  followUser(username: $username) {
+    isSuccess
+    error
+  }
+}
+    `;
+export type FollowUserMutationFn = Apollo.MutationFunction<FollowUserMutation, FollowUserMutationVariables>;
+
+/**
+ * __useFollowUserMutation__
+ *
+ * To run a mutation, you first call `useFollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followUserMutation, { data, loading, error }] = useFollowUserMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useFollowUserMutation(baseOptions?: Apollo.MutationHookOptions<FollowUserMutation, FollowUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FollowUserMutation, FollowUserMutationVariables>(FollowUserDocument, options);
+      }
+export type FollowUserMutationHookResult = ReturnType<typeof useFollowUserMutation>;
+export type FollowUserMutationResult = Apollo.MutationResult<FollowUserMutation>;
+export type FollowUserMutationOptions = Apollo.BaseMutationOptions<FollowUserMutation, FollowUserMutationVariables>;
+export const UnfollowUserDocument = gql`
+    mutation unfollowUser($username: String!) {
+  unfollowUser(username: $username) {
+    isSuccess
+    error
+  }
+}
+    `;
+export type UnfollowUserMutationFn = Apollo.MutationFunction<UnfollowUserMutation, UnfollowUserMutationVariables>;
+
+/**
+ * __useUnfollowUserMutation__
+ *
+ * To run a mutation, you first call `useUnfollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnfollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unfollowUserMutation, { data, loading, error }] = useUnfollowUserMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useUnfollowUserMutation(baseOptions?: Apollo.MutationHookOptions<UnfollowUserMutation, UnfollowUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnfollowUserMutation, UnfollowUserMutationVariables>(UnfollowUserDocument, options);
+      }
+export type UnfollowUserMutationHookResult = ReturnType<typeof useUnfollowUserMutation>;
+export type UnfollowUserMutationResult = Apollo.MutationResult<UnfollowUserMutation>;
+export type UnfollowUserMutationOptions = Apollo.BaseMutationOptions<UnfollowUserMutation, UnfollowUserMutationVariables>;
 export const MeDocument = gql`
     query me {
   me {

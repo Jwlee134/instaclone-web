@@ -2,6 +2,8 @@ import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../components/auth/Button";
+import PageTitle from "../components/PageTitle";
 import { FatText } from "../components/shared";
 import { useSeeProfileQuery } from "../graphql/generated";
 
@@ -28,6 +30,8 @@ const Username = styled.h3`
 const Row = styled.div`
   margin-bottom: 20px;
   font-size: 16px;
+  display: flex;
+  align-items: center;
 `;
 
 const List = styled.ul`
@@ -86,19 +90,39 @@ const Icon = styled.span`
   }
 `;
 
+const ProfileBtn = styled(Button)`
+  margin-left: 10px;
+  margin-top: 0;
+`;
+
 function Profile() {
   const params = useParams();
-  const { data } = useSeeProfileQuery({
+  const { data, loading } = useSeeProfileQuery({
     variables: { username: params.username! },
   });
 
   return (
     <div>
+      <PageTitle
+        title={
+          loading ? "Loading..." : `${data?.seeProfile?.username!} • Instagram`
+        }
+      />
       <Header>
         <Avatar src={data?.seeProfile?.avatar!} />
         <Column>
           <Row>
             <Username>{data?.seeProfile?.username}</Username>
+            {data?.seeProfile?.isMe && <ProfileBtn>Edit Profile</ProfileBtn>}
+            {!data?.seeProfile?.isMe && (
+              <>
+                {data?.seeProfile?.isFollowing ? (
+                  <ProfileBtn>Unfollow</ProfileBtn>
+                ) : (
+                  <ProfileBtn>Follow</ProfileBtn>
+                )}
+              </>
+            )}
           </Row>
           <Row>
             <List>

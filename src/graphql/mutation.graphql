@@ -46,3 +46,17 @@ mutation deleteComment($deleteCommentId: Int!) {
     error
   }
 }
+
+mutation followUser($username: String!) {
+  followUser(username: $username) {
+    isSuccess
+    error
+  }
+}
+
+mutation unfollowUser($username: String!) {
+  unfollowUser(username: $username) {
+    isSuccess
+    error
+  }
+}
